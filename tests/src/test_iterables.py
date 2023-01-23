@@ -6,7 +6,6 @@ from tricky.iterables import filter_item
 
 
 class TestIterables:
-
     class TestFilterItem:
         def test_filter_item_with_numbers(self) -> None:
             numbers = range(1000)
