@@ -32,6 +32,11 @@ python = "^3.8"
 
 [tool.poetry.group.dev.dependencies]
 mypy = ">=0.991"
+pytest = ">=7.2.1"
+
+[tool.pytest]
+addopts = "-W ignore -s"
+testspath = "tests"
 
 [build-system]
 requires = ["poetry-core"]
