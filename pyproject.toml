@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tricky"
-version = "0.0.3"
+version = "0.0.4"
 
 authors = ["Alexander Walther <alexander.walther.engineering@gmail.com>"]
 
@@ -39,11 +39,11 @@ poethepoet = "^0.18.1"
 script = "scripts.write_version:get_project_version"
 print_result = true
 
-[tool.poe.tasks.build]
-cmd = "poetry build"
+[tool.poe.tasks.publish-and-build]
+cmd = "poetry publish --build --skip-existing -n"
 
 [tool.poe.tasks.ship-it]
-sequence = ["write-version", "build"]
+sequence = ["write-version", "publish-and-build"]
 help = "Build and deploy"
 
 [tool.pytest]
