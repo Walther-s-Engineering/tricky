@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tricky"
-version = "0.0.1"
+version = "0.0.1a"
 
 authors = ["Alexander Walther <alexander.walther.engineering@gmail.com>"]
 
