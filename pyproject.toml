@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tricky"
-version = "0.0.1a"
+version = "0.0.2"
 
 authors = ["Alexander Walther <alexander.walther.engineering@gmail.com>"]
 
@@ -23,16 +23,28 @@ classifiers = [
     'Topic :: Utilities',
 ]
 packages = [
-    { include = "__init__.py" }
+    { include = "tricky" }
 ]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 
-
 [tool.poetry.group.dev.dependencies]
+toml = "0.10.2"
 mypy = ">=0.991"
 pytest = ">=7.2.1"
+poethepoet = "^0.18.1"
+
+[tool.poe.tasks.write-version]
+script = "scripts.write_version:get_project_version"
+print_result = true
+
+[tool.poe.tasks.build]
+cmd = "poetry build"
+
+[tool.poe.tasks.ship-it]
+sequence = ["write-version", "build"]
+help = "Build and deploy"
 
 [tool.pytest]
 addopts = "-W ignore -s"
