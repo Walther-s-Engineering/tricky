@@ -1,10 +1,30 @@
 [tool.poetry]
 name = "tricky"
 version = "0.0.1"
-description = ""
-authors = ["Alexander Walther <asushofman@gmail.com>"]
-license = "MIT"
+
+authors = ["Alexander Walther <alexander.walther.engineering@gmail.com>"]
+
+description = "A set of useful features to make working with your code easier."
+documentation = ""
+homepage = "https://github.com/Walther-s-Engineering/tricky"
+keywords = ["tools"]
+
 readme = "README.md"
+
+license = "MIT"
+
+classifiers = [
+    'Development Status :: 1 - Planning',
+    'Environment :: Console',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Operating System :: POSIX :: Linux',
+    'Topic :: Utilities',
+]
+packages = [
+    { include = "__init__.py" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
