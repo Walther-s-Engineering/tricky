@@ -2,6 +2,14 @@ import sys
 import typing as t
 
 ListItemType = t.TypeVar('ListItemType')
+__all__ = (
+    'Bool',
+    'String',
+    'Integer',
+    'Float',
+    'List',
+    'TypedList',
+)
 
 if sys.version_info > (3, 7):
     class Bool(str): ...  # noqa: E701
@@ -17,7 +25,7 @@ if sys.version_info > (3, 7):
     class TypedList(t.Generic[ListItemType], list):
         # TODO: Research run-time check for definitions like thus:
         #  >> numbers = TypedList[int]([1, 2, 3])
-        ...  # noqa: E701
+        ...
 
 if sys.version_info > (3, 8):
     ...
