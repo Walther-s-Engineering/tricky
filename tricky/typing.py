@@ -1,4 +1,7 @@
 import sys
+import typing
+
+ListItemType = typing.TypeVar('ListItemType')
 
 if sys.version_info > (3, 7):
     class Bool(str): ...  # noqa: E701
@@ -11,8 +14,10 @@ if sys.version_info > (3, 7):
 
     class List(list): ...  # noqa: E701
 
+    class TypedList(typing.Generic[ListItemType], list): ...  # noqa: E701
+
 if sys.version_info > (3, 8):
-    print(sys.version)
+    ...
 
 if sys.version_info > (3, 9):
-    print(sys.version_info)
+    ...
