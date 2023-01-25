@@ -1,7 +1,7 @@
 import sys
-import typing
+import typing as t
 
-ListItemType = typing.TypeVar('ListItemType')
+ListItemType = t.TypeVar('ListItemType')
 
 if sys.version_info > (3, 7):
     class Bool(str): ...  # noqa: E701
@@ -14,7 +14,7 @@ if sys.version_info > (3, 7):
 
     class List(list): ...  # noqa: E701
 
-    class TypedList(typing.Generic[ListItemType], list):
+    class TypedList(t.Generic[ListItemType], list):
         # TODO: Research run-time check for definitions like thus:
         #  >> numbers = TypedList[int]([1, 2, 3])
         ...  # noqa: E701
