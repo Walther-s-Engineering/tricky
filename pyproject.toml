@@ -39,15 +39,26 @@ poethepoet = "^0.18.1"
 [tool.poetry.extras]
 pydantic = ['pydantic']
 
+[tool.poe.tasks.publish-and-build]
+cmd = "poetry publish --build"
+
+[tool.poe.tasks.add-changes]
+cmd = "git add -A"
+
+[tool.poe.tasks.commit-version]
+cmd = "git commit -S -m '[$(git branch --show-current)] Version __init__ file upgrade'"
+
 [tool.poe.tasks.write-version]
 script = "scripts.write_version:get_project_version"
 print_result = true
 
-[tool.poe.tasks.publish-and-build]
-cmd = "poetry publish --build"
-
 [tool.poe.tasks.ship-it]
-sequence = ["write-version", "publish-and-build"]
+sequence = [
+    "write-version",
+    "add-changes",
+    "commit-version",
+    "publish-and-build",
+]
 help = "Build and deploy"
 
 [tool.pytest]
