@@ -14,7 +14,10 @@ if sys.version_info > (3, 7):
 
     class List(list): ...  # noqa: E701
 
-    class TypedList(typing.Generic[ListItemType], list): ...  # noqa: E701
+    class TypedList(typing.Generic[ListItemType], list):
+        # TODO: Research run-time check for definitions like thus:
+        #  >> numbers = TypedList[int]([1, 2, 3])
+        ...  # noqa: E701
 
 if sys.version_info > (3, 8):
     ...
