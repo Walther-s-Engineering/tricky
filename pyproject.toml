@@ -28,12 +28,16 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
+pydantic = {version = "1.10.4", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 toml = "0.10.2"
 mypy = ">=0.991"
 pytest = ">=7.2.1"
 poethepoet = "^0.18.1"
+
+[tool.poetry.extras]
+pydantic = ['pydantic']
 
 [tool.poe.tasks.write-version]
 script = "scripts.write_version:get_project_version"
