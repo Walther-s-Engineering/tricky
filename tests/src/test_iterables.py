@@ -2,7 +2,9 @@ import typing as t
 
 from string import ascii_letters
 
+from tricky import iterables
 from tricky.iterables import filter_item
+from tricky.typing import Integer, String
 
 
 class TestIterables:
@@ -65,3 +67,24 @@ class TestIterables:
             )
             assert result is None
             assert result != expecting_number
+
+    class TestRemoveValuesFromIterable:
+        def test_remove_values_from_iterable_with_strings(self) -> None:
+            items: t.List[String] = list('abcdefghijk')
+            removable_items: t.List[String] = list('acfh')
+            result: t.List[Integer] = iterables.remove_values_from_iterable(
+                items,
+                removable_items,
+            )
+            for item in removable_items:
+                assert item not in result
+
+        def test_remove_values_from_iterable_with_integers(self) -> None:
+            items: t.List[Integer] = list(range(10))
+            removable_items: t.List[Integer] = [2, 4, 5, 7]
+            result: t.List[Integer] = iterables.remove_values_from_iterable(
+                items,
+                removable_items,
+            )
+            for item in removable_items:
+                assert item not in result
