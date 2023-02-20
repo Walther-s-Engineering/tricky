@@ -28,7 +28,31 @@ if sys.version_info > (3, 7):
         ...
 
 if sys.version_info > (3, 8):
-    ...
+    Bool = bool
+    Bytes = bytes
+    BytesArray = bytearray
+    Dict = dict
+    String = str
+    Integer = int
+    Float = float
+    List = list
 
 if sys.version_info > (3, 9):
-    ...
+    Bool = bool
+    Bytes = bytes
+    BytesArray = bytearray
+    Dict = dict
+    String = str
+    Integer = int
+    Float = float
+    List = list
+
+if sys.version_info > (3, 10):
+    Bool: t.TypeAlias = bool
+    Bytes: t.TypeAlias = bytes
+    BytesArray: t.TypeAlias = bytearray
+    Dict: t.TypeAlias = dict
+    String: t.TypeAlias = str
+    Integer: t.TypeAlias = int
+    Float: t.TypeAlias = float
+    List: t.TypeAlias = list
