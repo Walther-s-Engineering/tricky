@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tricky"
-version = "0.0.6a"
+version = "0.0.7"
 
 authors = ["Alexander Walther <alexander.walther.engineering@gmail.com>"]
 
@@ -46,7 +46,7 @@ cmd = "poetry publish --build"
 cmd = "git add -A"
 
 [tool.poe.tasks.commit-version]
-cmd = "git commit -S -m '[$(git branch --show-current)] Version __init__ file upgrade'"
+cmd = "git commit -S -m '[main] Version __init__ file upgrade'"
 
 [tool.poe.tasks.write-version]
 script = "scripts.write_version:get_project_version"
