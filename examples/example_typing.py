@@ -3,7 +3,8 @@ from tricky.typing import (
     String,
     Integer,
     List,
-    TypedList
+    TypedList,
+    AnnotatedString,
 )
 
 assert isinstance(Bool(True), bool)
@@ -19,3 +20,8 @@ assert isinstance(List(), list)
 assert isinstance(list(), List)
 
 assert isinstance(TypedList[int]([1, 2, 3]), list)
+
+expecting_value = 'example'
+assert isinstance(AnnotatedString['example'](expecting_value), str)
+assert isinstance(AnnotatedString['example'](expecting_value), AnnotatedString)
+

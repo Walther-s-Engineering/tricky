@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import sys
 import typing as t
+import typing_extensions as te
 
-ListItemType = t.TypeVar('ListItemType')
 __all__ = (
     'Bool',
     'String',
@@ -9,23 +11,77 @@ __all__ = (
     'Float',
     'List',
     'TypedList',
+    'AnnotatedString',
 )
 
+ListItemType = t.TypeVar('ListItemType')
+ConcreteString = t.TypeVar('ConcreteString')
+
+
 if sys.version_info > (3, 7):
-    class Bool(str): ...  # noqa: E701
+    Bool: te.TypeAlias = bool
+    String: te.TypeAlias = str
+    Integer: te.TypeAlias = int
+    Float: te.TypeAlias = float
+    List: te.TypeAlias = list
+    Tuple: te.TypeAlias = tuple
 
-    class String(str): ...  # noqa: E701
+    class AnnotatedString(t.Generic[ConcreteString], String):
+        __annotated_value: str
 
-    class Integer(int): ...  # noqa: E701
+        def __init__(self, _: str) -> None:
+            super().__init__()
 
-    class Float(str): ...  # noqa: E701
+        def __new__(cls, *args, **kwargs) -> AnnotatedString:
+            if args:
+                passed_value = args[0]
+            else:
+                raise ValueError(f'The passed value cannot be of type  {type(None)}')
+            if passed_value is not None:
+                if passed_value != cls.__annotated_value:
+                    raise ValueError(
+                        f'Annotated and passed values are not equal '
+                        f'\'{passed_value}\' != \'{cls.__annotated_value}\''
+                    )
+            instance = super().__new__(cls)
+            return instance
 
-    class List(list): ...  # noqa: E701
+        def __class_getitem__(cls, item: String) -> t.Type[AnnotatedString]:
+            if isinstance(item, String) is True:
+                cls.__annotated_value = item
+                return cls
+            raise TypeError(
+                f'The annotated value must be type of {String}, '
+                f'not {type(item)}',
+            )
 
-    class TypedList(t.Generic[ListItemType], list):
-        # TODO: Research run-time check for definitions like thus:
-        #  >> numbers = TypedList[int]([1, 2, 3])
-        ...
+    _TypeAnnotation = t.TypeVar('_TypeAnnotation')
+
+    class TypedList(t.Generic[ListItemType], List):
+        __annotated_type: type
+
+        def __init__(self, *sequence) -> None:
+            super().__init__(sequence)
+
+        def __new__(cls, *sequence: Tuple[t.Any]) -> TypedList:
+            for item in sequence:
+                if isinstance(item, cls.__annotated_type) is False:
+                    raise ValueError(
+                        f'The passed item "{item}" of the sequence is of type {type(item)}, '
+                        f'but the annotated type is {cls.__annotated_type}',
+                    )
+
+            if isinstance(sequence, Tuple) is True:
+                instance = super().__new__(cls, sequence)
+                return instance
+            else:
+                raise ValueError(sequence)
+
+        def __class_getitem__(cls, type_: _TypeAnnotation) -> t.Type[TypedList]:
+            if isinstance(type_, type) is True:
+                cls.__annotated_type = type_
+                return cls
+            raise TypeError(f'The annotated value must be a type, not {type(type_)}')
 
 if sys.version_info > (3, 8):
     Bool = bool
