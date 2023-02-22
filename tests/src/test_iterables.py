@@ -72,7 +72,7 @@ class TestIterables:
         def test_remove_values_from_iterable_with_strings(self) -> None:
             items: t.List[String] = list('abcdefghijk')
             removable_items: t.List[String] = list('acfh')
-            result: t.List[Integer] = iterables.remove_values_from_iterable(
+            result: t.List[String] = iterables.remove_values_from_iterable(
                 items,
                 removable_items,
             )

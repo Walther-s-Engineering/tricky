@@ -1,14 +1,14 @@
 import typing as t
 
-from .typing import Bool
+from .typing import Bool, List
 
 __all__ = (
     'filter_item',
     'remove_values_from_iterable',
 )
 
-Item = t.TypeVar('Item', bound=t.Any)
-Iterables = t.Iterable[t.Any]
+Item = t.TypeVar('Item')
+Iterables = t.Iterable[Item]
 
 
 def filter_item(
@@ -23,9 +23,9 @@ def filter_item(
 
 
 def remove_values_from_iterable(
-    initial_values: t.Iterable[t.Any],
-    values_to_remove: t.Iterable[t.Any],
-) -> t.List[t.Any]:
+    initial_values: Iterables,
+    values_to_remove: Iterables,
+) -> t.List[Item]:
     return [
         initial_value
         for initial_value in initial_values
