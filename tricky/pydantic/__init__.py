@@ -1,1 +1,1 @@
-from .types import CommaSeparatedString  # noqa: F401
+from .types import CommaSeparatedStringField  # noqa: F401

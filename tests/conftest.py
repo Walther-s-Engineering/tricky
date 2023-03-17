@@ -1,1 +1,3 @@
-pytest_plugins = []
+pytest_plugins = [
+    'fixtures.helpers',
+]

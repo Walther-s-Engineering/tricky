@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-import functools
-import copy
 import sys
 import typing as t
 import typing_extensions as te
+
+from contextvars import ContextVar
 
 __all__ = (
     'Bool',
@@ -36,47 +36,38 @@ if sys.version_info > (3, 7):
     Tuple: te.TypeAlias = tuple
     Type: te.TypeAlias = type
 
-    # TODO: Make thread-safe
-    class AnnotatedString(t.Generic[_ConcreteString], String):
-        __annotated_value: String
+    _annotated_string_transfer_var = ContextVar('string_annotated_value')
 
+    class AnnotatedString(t.Generic[_ConcreteString], String):
         def __init__(self, _: String) -> None:
             super().__init__()
 
         def __new__(cls, *args, **kwargs) -> AnnotatedString:
             if args:
-                validator: _StringValidationTransferObject = args[0]
-                passed_value: String = args[1]
+                __passed_value = args[0]
+                __annotated_value = _annotated_string_transfer_var.get()
             else:
                 raise ValueError(f'The passed value cannot be of type  {type(None)}')
-
-            if passed_value is not None:
-                if passed_value != validator.annotated_value:
+            if __passed_value is not None:
+                if __passed_value != __annotated_value:
                     raise ValueError(
                         f'Annotated and passed values are not equal '
-                        f'\'{validator.annotated_value}\' != \'{passed_value}\''
+                        f'\'{__annotated_value}\' != \'{__passed_value}\''
                     )
-            cls.__new__ = validator.origin_new
-            instance = super().__new__(cls, passed_value)
-            return instance
+            else:
+                pass
+            __instance = super().__new__(cls, __passed_value)
+            __instance.__annotated_value = __annotated_value
+            return __instance
 
         def __class_getitem__(cls, item: String) -> t.Type[AnnotatedString]:
             if isinstance(item, String) is True:
-                origin_new = copy.deepcopy(cls.__new__)
-                cls.__new__ = functools.partialmethod(
-                    cls.__new__,
-                    _StringValidationTransferObject(
-                        annotated_type=String,
-                        annotated_value=item,
-                        origin_new=origin_new,
-                    ),
-                )
+                _annotated_string_transfer_var.set(item)
                 return cls
             raise TypeError(
                 f'The annotated value must be type of {String}, '
                 f'not {type(item)}',
             )
-
 
     # TODO: Make thread-safe
     class TypedList(t.Generic[_TypedListItemType], List):
