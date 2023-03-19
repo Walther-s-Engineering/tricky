@@ -19,7 +19,7 @@ assert isinstance('example', String)
 assert isinstance(List(), list)
 assert isinstance(list(), List)
 
-assert isinstance(TypedList[int]([1, 2, 3]), list)
+assert isinstance(TypedList[int](1, 2, 3), list)
 
 expecting_value = 'example'
 assert isinstance(AnnotatedString['example'](expecting_value), str)

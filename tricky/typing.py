@@ -21,12 +21,6 @@ _TypedListItemType = t.TypeVar('_TypedListItemType')
 _ConcreteString = t.TypeVar('_ConcreteString')
 
 
-class _StringValidationTransferObject(t.NamedTuple):
-    annotated_type: Type
-    annotated_value: t.Any
-    origin_new: t.Callable[..., ...]
-
-
 if sys.version_info > (3, 7):
     Bool: te.TypeAlias = bool
     String: te.TypeAlias = str
@@ -39,25 +33,22 @@ if sys.version_info > (3, 7):
     _annotated_string_transfer_var = ContextVar('string_annotated_value')
 
     class AnnotatedString(t.Generic[_ConcreteString], String):
-        def __init__(self, _: String) -> None:
-            super().__init__()
-
         def __new__(cls, *args, **kwargs) -> AnnotatedString:
             if args:
                 __passed_value = args[0]
-                __annotated_value = _annotated_string_transfer_var.get()
+                __annotated_type = _annotated_string_transfer_var.get()
             else:
-                raise ValueError(f'The passed value cannot be of type  {type(None)}')
+                raise TypeError(f'The passed value cannot be of type  {type(None)}')
             if __passed_value is not None:
-                if __passed_value != __annotated_value:
+                if __passed_value != __annotated_type:
                     raise ValueError(
                         f'Annotated and passed values are not equal '
-                        f'\'{__annotated_value}\' != \'{__passed_value}\''
+                        f'\'{__annotated_type}\' != \'{__passed_value}\''
                     )
             else:
                 pass
             __instance = super().__new__(cls, __passed_value)
-            __instance.__annotated_value = __annotated_value
+            __instance.__annotated_type = __annotated_type
             return __instance
 
         def __class_getitem__(cls, item: String) -> t.Type[AnnotatedString]:
@@ -69,30 +60,34 @@ if sys.version_info > (3, 7):
                 f'not {type(item)}',
             )
 
-    # TODO: Make thread-safe
+    _typed_list_transfer_var = ContextVar('typed_list_annotated_value')
+
     class TypedList(t.Generic[_TypedListItemType], List):
-        __annotated_type: Type
+        def __new__(cls, *sequence: _TypedListItem) -> TypedList[_TypedListItemType]:
+            __annotated_type: Type = _typed_list_transfer_var.get()
 
-        def __init__(self, *sequence) -> None:
-            super().__init__(sequence)
-
-        def __new__(cls, *sequence: t.Tuple[_TypedListItem]) -> TypedList[_TypedListItemType]:
-            for item in sequence:
-                if isinstance(item, cls.__annotated_type) is False:
-                    raise ValueError(
-                        f'The passed item "{item}" of the sequence is of type {type(item)}, '
-                        f'but the annotated type is {cls.__annotated_type}',
-                    )
+            def _validate(iterable: t.Iterable) -> None:
+                for item in iterable:
+                    if isinstance(item, (list, tuple, set)) is True:
+                        return _validate(item)
+                    if isinstance(item, __annotated_type) is False:
+                        raise TypeError(
+                            f'The passed item "{item}" of the sequence is of type {type(item)}, '
+                            f'but the annotated type is {__annotated_type}',
+                        )
+                    continue
+            _validate(sequence)
 
             if isinstance(sequence, tuple) is True:
-                instance = super().__new__(cls)
-                return instance
+                __instance = super().__new__(cls)
+                __instance.__annotated_type = __annotated_type
+                return __instance
             else:
                 raise ValueError(sequence)
 
         def __class_getitem__(cls, type_: Type) -> t.Type[TypedList]:
             if isinstance(type_, Type) is True:
-                cls.__annotated_type = type_
+                _typed_list_transfer_var.set(type_)
                 return cls
             raise TypeError(f'The annotated value must be a type, not {type(type_)}')
 
