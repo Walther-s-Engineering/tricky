@@ -4,7 +4,7 @@ from string import ascii_letters
 
 from tricky import iterables
 from tricky.iterables import filter_item
-from tricky.typing import Integer, String
+from tricky.typing import Bool, Integer, String
 
 
 class TestIterables:
@@ -88,3 +88,32 @@ class TestIterables:
             )
             for item in removable_items:
                 assert item not in result
+
+    class TestAreThereDuplicates:
+        def test_are_there_duplicates_is_true(self) -> None:
+            obj = object()
+            items_to_test = (
+                [1, 2, 3, 3],
+                (1, 1, 2, 3),
+                ['q', 'w', 'e', 'e', 'r', 't', 'y'],
+                [{'key': 1}, {'key': 1}],
+                (obj, obj),
+                'some_string',
+            )
+            for items in items_to_test:
+                result: Bool = iterables.are_there_duplicates(items)
+                assert result is True
+
+        def test_are_there_duplicates_is_false(self) -> None:
+            items_to_test = (
+                [1, 2, 3, 4],
+                [1, 2, 3, 4, 5, 6],
+                ['q', 'w', 'e', 'r', 't', 'y'],
+                [{'key': 1}, {'key': 2}],
+                (object(), object()),
+                'some_thing',
+            )
+            for items in items_to_test:
+                result: Bool = iterables.are_there_duplicates(items)
+                assert result is False
+

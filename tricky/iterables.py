@@ -31,3 +31,10 @@ def remove_values_from_iterable(
         for initial_value in initial_values
         if initial_value not in values_to_remove
     ]
+
+
+def are_there_duplicates(sequence: t.Iterable) -> Bool:
+    for index, item in enumerate(sequence, start=1):
+        if item in sequence[index:]:
+            return True
+    return False
