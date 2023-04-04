@@ -8,6 +8,8 @@ from contextvars import ContextVar
 
 __all__ = (
     'Bool',
+    'Bytes',
+    'BytesArray',
     'String',
     'Integer',
     'Float',
@@ -23,6 +25,8 @@ _ConcreteString = t.TypeVar('_ConcreteString')
 
 if sys.version_info > (3, 7):
     Bool: te.TypeAlias = bool
+    Bytes: te.TypeAlias = bytes
+    BytesArray: te.TypeAlias = bytearray
     String: te.TypeAlias = str
     Integer: te.TypeAlias = int
     Float: te.TypeAlias = float
@@ -94,6 +98,8 @@ if sys.version_info > (3, 7):
 
 if sys.version_info > (3, 8):
     Bool: te.TypeAlias = bool
+    Bytes: te.TypeAlias = bytes
+    BytesArray: te.TypeAlias = bytearray
     String: te.TypeAlias = str
     Integer: te.TypeAlias = int
     Float: te.TypeAlias = float
@@ -104,6 +110,8 @@ if sys.version_info > (3, 8):
 
 if sys.version_info > (3, 9):
     Bool: te.TypeAlias = bool
+    Bytes: te.TypeAlias = bytes
+    BytesArray: te.TypeAlias = bytearray
     String: te.TypeAlias = str
     Integer: te.TypeAlias = int
     Float: te.TypeAlias = float
