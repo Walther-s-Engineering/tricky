@@ -6,9 +6,11 @@ import typing as t
 from types import FunctionType
 
 DefaultAny = t.TypeVar('DefaultAny')
+AnyFunction = t.TypeVar('AnyFunction', bound=FunctionType)
+DecoratedFunction = t.TypeVar('DecoratedFunction', bound=functools.wraps)
 
 
-def suppress(default_value, exceptions: t.Tuple[t.Type[Exception]] = (Exception,)):
+def suppress(default_value, exceptions: t.Tuple[t.Type[Exception]] = (Exception,)) -> DecoratedFunction:
     """ This decorator is useful if you need to return the default
     value of a function despite possible errors during its execution.
     """
@@ -27,9 +29,6 @@ def suppress(default_value, exceptions: t.Tuple[t.Type[Exception]] = (Exception,
             return default_value
         return wrapper
     return decorating
-
-
-AnyFunction = t.TypeVar('AnyFunction', bound=FunctionType)
 
 
 def hide_signature(function: AnyFunction) -> AnyFunction:
