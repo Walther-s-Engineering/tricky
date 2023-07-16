@@ -5,7 +5,7 @@ from tricky.utils.decorators import suppress
 
 class TestDecorators:
     class TestSupressDecorator:
-        def test_supressing_with_builtin_exc(
+        def test_supress_with_builtin_exc(
             self,
             not_raises: t.Callable[..., t.ContextManager[Exception]],
         ) -> None:
