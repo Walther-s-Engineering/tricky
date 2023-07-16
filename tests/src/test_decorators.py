@@ -26,7 +26,7 @@ class TestDecorators:
 
                 assert result is None
 
-        def test_supressing_custom_exception_type(
+        def test_supress_custom_exception_type(
             self,
             not_raises: t.Callable[..., t.ContextManager[Exception]],
         ) -> None:
@@ -42,7 +42,7 @@ class TestDecorators:
 
             assert result is None
 
-        def test_supressing_returns_valid_default_value(
+        def test_supress_returns_valid_default_value(
             self,
             not_raises: t.Callable[..., t.ContextManager[Exception]],
         ) -> None:
