@@ -14,7 +14,7 @@ readme = "README.md"
 license = "MIT"
 
 classifiers = [
-    'Development Status :: 1 - Planning',
+    'Development Status :: 3 - Alpha',
     'Environment :: Console',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
