@@ -10,7 +10,23 @@ AnyFunction = t.TypeVar('AnyFunction', bound=FunctionType)
 DecoratedFunction = t.TypeVar('DecoratedFunction', bound=functools.wraps)
 
 
-def suppress(default_value, exceptions: t.Tuple[t.Type[Exception]] = (Exception,)) -> DecoratedFunction:
+class suppress_and_reraise(contextlib.suppress):
+    _exceptions: t.Type[BaseException]
+
+    def __init__(
+        self,
+        *exceptions: t.Type[BaseException],
+        reraise_to: Exception = Exception('Bare re-raised exception'),
+    ) -> None:
+        super().__init__(*exceptions)
+        self._reraise_to = reraise_to
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> t.NoReturn:
+        if exc_type is not None and issubclass(exc_type, self._exceptions):
+            raise self._reraise_to
+
+
+def suppress(default_value, exceptions: t.Tuple[t.Type[Exception], ...] = (Exception,)) -> DecoratedFunction:
     """ This decorator is useful if you need to return the default
     value of a function despite possible errors during its execution.
     """

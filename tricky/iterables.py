@@ -1,10 +1,14 @@
 import typing as t
 
-from .typing import Bool, List
+from .typing import Bool, String
 
 __all__ = (
     'filter_item',
     'remove_values_from_iterable',
+    'are_there_duplicates',
+    'unpack_values',
+    'unpack_values_by_condition',
+    'unzip',
 )
 
 Item = t.TypeVar('Item')
@@ -38,3 +42,31 @@ def are_there_duplicates(sequence: t.Iterable) -> Bool:
         if item in sequence[index:]:
             return True
     return False
+
+
+def unpack_values(
+    iterable: t.Iterable[t.Any],
+    attribute: String,
+) -> t.List[t.Any]:
+    return [
+        getattr(item, attribute)
+        for item in iterable if hasattr(item, attribute) is True
+    ]
+
+
+def unpack_values_by_condition(
+    iterable: t.Iterable[t.Any],
+    attribute: String,
+    condition: t.Callable[..., t.Any],
+) -> t.List[t.Any]:
+    return [
+        getattr(item, attribute) for item in iterable
+        if hasattr(item, attribute) and condition(item) is True
+    ]
+
+
+def unzip(*iterables: t.Iterable[t.Any]) -> t.List[t.Any]:
+    result: t.List[t.Any] = []
+    for items in iterables:
+        result.extend(items)
+    return result
