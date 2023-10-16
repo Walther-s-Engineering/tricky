@@ -1,3 +1,4 @@
+import contextlib
 import typing as t
 
 from .typing import Bool, String
@@ -37,7 +38,28 @@ def remove_values_from_iterable(
     ]
 
 
-def are_there_duplicates(sequence: t.Iterable) -> Bool:
+def are_there_duplicates(sequence: t.Union[t.Iterable, t.Sized]) -> Bool:
+    """
+    This function are_there_duplicates checks within a sequence if there are any duplicate items.
+    It iterates over all elements in the given sequence and for each element,
+    it checks if the same element exists in the remaining sequence or not.
+    If the element exists, it immediately returns True indicating there are duplicates,
+    else if it traversed the entire sequence and found no duplicates, it returns False.
+
+    :param sequence:
+    :return: bool:
+    """
+    # NOTE: This is added because sets in Python are collections of hashable (or immutable)
+    #  elements, and dictionaries are mutable, thus not hashable.
+    # So, the non-optimized method will be used below.
+    with contextlib.suppress(TypeError):
+        set_sequence = set(sequence)
+
+        if len(set_sequence) == len(sequence):
+            return False
+        else:
+            return True
+
     for index, item in enumerate(sequence, start=1):
         if item in sequence[index:]:
             return True
@@ -50,7 +72,7 @@ def unpack_values(
 ) -> t.List[t.Any]:
     return [
         getattr(item, attribute)
-        for item in iterable if hasattr(item, attribute) is True
+        for item in iterable if hasattr(item, attribute)
     ]
 
 
@@ -66,7 +88,4 @@ def unpack_values_by_condition(
 
 
 def unzip(*iterables: t.Iterable[t.Any]) -> t.List[t.Any]:
-    result: t.List[t.Any] = []
-    for items in iterables:
-        result.extend(items)
-    return result
+    return [item for iterable in iterables for item in iterable]
